@@ -29,7 +29,13 @@ export default function CheckboxContinent({handleFilters}) {
         <div>
             {continents.map(({id, name}) => (
                 <div key={id}>
-                    <input onChange={() => handleContinent(id)} type='checkbox' value={name}/> {name}
+                    <input 
+                        onChange={() => handleContinent(id)}
+                        type='checkbox'
+                        value={name}
+                        checked={Checked.indexOf(id) === -1 ? false : true}
+                    />
+                    {name}
                 </div>
             ))}
         </div>

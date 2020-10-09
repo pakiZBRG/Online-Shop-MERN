@@ -95,7 +95,7 @@ export default function UploadProduct({history}) {
                         />
                         <select onChange={continentChange} value={Continent}>
                             {continents.map(({id, value}) => (
-                                <option key={id} value={value}>{value}</option>
+                                <option key={id} value={id}>{value}</option>
                             ))}
                         </select>
                         <button className='submit-form'>

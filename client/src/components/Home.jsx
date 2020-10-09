@@ -9,6 +9,10 @@ import CheckboxContinent from '../travel-project/utility/CheckboxContinent';
 
 export default function Home({match}) {
     const [Products, setProducts] = useState([]);
+    const [Filter, setFilter] = useState({
+        continent: [],
+        price: []
+    });
     const [userData, setUserData] = useState({
         username: "",
         email: ""
@@ -29,7 +33,11 @@ export default function Home({match}) {
                 .catch(err => toast.error(err.response.data.error));
         }
 
-        axios.get('/products/getProducts')
+        getProducts(null);
+    }, [match.params]);
+
+    const getProducts = data => {
+        axios.post('/products/getProducts', data)
             .then(res => {
                 if(res.data.success){
                     setProducts(res.data.products);
@@ -37,7 +45,7 @@ export default function Home({match}) {
                     alert(res.data.err)
                 }
             })
-    }, [match.params]);
+    }
 
     const productCard = Products.map((product, i) => (
         <div className='travel-grid-card' key={i}>
@@ -47,8 +55,17 @@ export default function Home({match}) {
         </div>
     ));
 
+    const showFilterResults = (filters) => {
+        const data = { filters }
+        getProducts(data)
+    }
+
     const handleFilters = (filters, category) => {
-        
+        const newFilter = {...Filter}
+        newFilter[category] = filters;
+
+        showFilterResults(newFilter);
+        setFilter(newFilter);
     }
 
     return (
@@ -58,7 +75,7 @@ export default function Home({match}) {
                     <Navbar username={`Welcome, ${userData.username}`}/>
                     <h1 className='travel-anywhere'>Travel Anywhere<i className="fa fa-space-shuttle fa-lg"></i></h1>
                     <CheckboxContinent
-                        handleFilters={filters => handleFilters(filters, 'continents')}
+                        handleFilters={filters => handleFilters(filters, 'continent')}
                     />
                     {(Products.length === 0) ?
                         <div className='travel-flex'>

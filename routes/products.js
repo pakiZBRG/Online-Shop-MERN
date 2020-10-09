@@ -52,8 +52,20 @@ router.post("/uploadProduct", (req, res) => {
 });
 
 //Get all Products
-router.get('/getProducts', (req, res) => {
-    Product.find()
+router.post('/getProducts', (req, res) => {
+    let findArgs = {}
+
+    for(let key in req.body.filters){
+        if(req.body.filters[key].length > 0){
+            if(key === 'price') {
+
+            } else {
+                findArgs[key] = req.body.filters[key];
+            }
+        }
+    }
+
+    Product.find(findArgs)
         .exec()
         .then(products => {
             res.status(200).json({
